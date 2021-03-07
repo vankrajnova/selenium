@@ -17,9 +17,14 @@ class FormFactory:
         time.sleep(0.5)
         return self.admin_form
 
-    def open_store_page(self):
+    def open_store_form(self):
         self.app.wd.get("http://localhost/litecart/en/")
         time.sleep(0.5)
         return self.store_form
+
+    def open_new_user_form(self):
+        self.app.wd.get("http://localhost/litecart/en/create_account")
+        time.sleep(0.5)
+        return self.new_user_form
 
 
