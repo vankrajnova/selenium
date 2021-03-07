@@ -13,8 +13,13 @@ def driver(request):
     return wd
 
 
-def open_login_page(driver):
+def open_admin_login_page(driver):
     driver.get("http://localhost/litecart/admin")
+    time.sleep(0.5)
+
+
+def open_store_page(driver):
+    driver.get("http://localhost/litecart/en/")
     time.sleep(0.5)
 
 
@@ -41,20 +46,33 @@ def click_menu_buttons(driver):
                 assert is_element_present(driver)
 
 
+def verify_products_has_one_sticker(driver):
+    products = driver.find_elements_by_xpath("""//*[contains(@class, "product column shadow hover-light")]""")
+    for product in products:
+        stickers = product.find_elements_by_xpath(""".//*[contains(@class, "sticker")]""")
+        assert len(stickers) == 1
+
+
 def is_element_present(driver):
     elements = driver.find_elements(By.TAG_NAME, "h1")
     return len(elements) > 0
 
 
 def test_login(driver):
-    open_login_page(driver)
+    open_admin_login_page(driver)
 
     login_as_admin(driver)
 
 
 def test_task_7(driver):
-    open_login_page(driver)
+    open_admin_login_page(driver)
 
     login_as_admin(driver)
 
     click_menu_buttons(driver)
+
+
+def test_task_8(driver):
+    open_store_page(driver)
+
+    verify_products_has_one_sticker(driver)
