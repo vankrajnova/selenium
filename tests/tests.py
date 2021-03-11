@@ -34,7 +34,8 @@ def test_task_11(app):
     app.forms.store_form.login(email, password)
 
 
-
+def test_task_12(app):
+    """"""
 
 
 

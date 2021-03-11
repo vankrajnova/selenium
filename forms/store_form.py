@@ -38,7 +38,7 @@ class Elements:
         return self.app.wd.find_element_by_xpath(xpath)
 
     def products(self):
-        xpath = """//*[contains(@class, "box")]//*[contains(@class, "link")]"""
+        xpath = """//li[contains(@class, "product")]"""
         return self.app.wd.find_elements_by_xpath(xpath)
 
     def logout_btn(self):
