@@ -28,6 +28,16 @@ def test_task_8(app):
     store_form.verify_products_has_one_sticker()
 
 
+def test_task_9(app):
+    admin_form = app.forms.open_admin_form()
+    admin_form.login_as_admin()
+
+    admin_form.open_countries_tab()
+    admin_form.verify_sort_for_all_country()
+
+    admin_form.verify_sort_zones_in_country()
+
+
 def test_task_11(app):
     email = generate_email()
     password = "Qwe12345"
