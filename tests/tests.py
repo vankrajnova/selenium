@@ -28,7 +28,9 @@ def test_task_8(app):
     store_form.verify_products_has_one_sticker()
 
 
-def test_task_9(app):
+def test_task_9_verify_sort_in_all_countries_list(app):
+    """Проверяет сортировку всех стран"""
+
     admin_form = app.forms.open_admin_form()
     admin_form.login_as_admin()
 
@@ -36,6 +38,26 @@ def test_task_9(app):
     admin_form.verify_sort_for_all_country()
 
     admin_form.verify_sort_zones_in_country()
+
+
+def test_task_9_verify_sort_for_zone_list_in_country(app):
+    """Проверяет сортировку зон в карточке страны"""
+
+    admin_form = app.forms.open_admin_form()
+    admin_form.login_as_admin()
+
+    admin_form.open_countries_tab()
+
+    admin_form.verify_sort_zones_in_country()
+
+
+def test_task_9_verify_sort_zones_in_geo_zone(app):
+    """Проверяет сортировку зон в карточке страны на вкладке Geo zone"""
+    admin_form = app.forms.open_admin_form()
+    admin_form.login_as_admin()
+
+    admin_form.open_geo_zones_tab()
+    admin_form.verify_sort_zones_in_geo_zone()
 
 
 def test_task_11(app):

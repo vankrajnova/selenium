@@ -25,6 +25,9 @@ class AdminForm:
         self._elements.menu_btn_countries().click()
         time.sleep(1)
 
+    def open_geo_zones_tab(self):
+        self.app.wd.get('http://localhost/litecart/admin/?app=geo_zones&doc=geo_zones')
+
     def click_all_menu_buttons(self):
         elements = self._elements.top_level_buttons()
         if len(elements) > 0:
@@ -39,6 +42,16 @@ class AdminForm:
 
     def verify_product_presents(self, product_name):
         assert self._elements.is_product_present(product_name) == 1
+
+    def verify_sort_zones_in_geo_zone(self):
+        href_list = self._elements.get_href_list_for_geo_zones()
+        for href in href_list:
+            self.app.wd.get(href)
+            time.sleep(0.5)
+            actual_list = self._elements.get_zone_name_list_in_geo_zone()
+            expected_list = self._elements.get_zone_name_list_in_geo_zone()
+            expected_list.sort()
+            assert expected_list == actual_list
 
     def verify_sort_for_all_country(self):
         actual_list = self._elements.get_country_name_list()
@@ -61,6 +74,13 @@ class Elements:
     def __init__(self, app):
         self.app = app
 
+    def get_href_list_for_geo_zones(self):
+        all_row = self.app.wd.find_elements_by_xpath("""//a[contains(@title, "Edit")]""")
+        href_list = []
+        for row in all_row:
+            href_list.append(row.get_attribute("href"))
+        return href_list
+
     def get_href_list_for_country_with_zones(self):
         all_row = self.app.wd.find_elements_by_xpath("""//tr[contains(@class, "row")]""")
         href_list = []
@@ -79,6 +99,15 @@ class Elements:
             name = cells[4].text
             country_name_list.append(name)
         return country_name_list
+
+    def get_zone_name_list_in_geo_zone(self):
+        zone_name_list = []
+        all_zones_name = self.app.wd.find_elements_by_xpath("""//select[contains(@name, '[zone_code]')]//option[
+        contains(@selected, 'selected')]""")
+        for name in all_zones_name:
+            text = name.get_attribute("innerText")
+            zone_name_list.append(text)
+        return zone_name_list
 
     def get_zone_name_list(self):
         zone_name_list = []
