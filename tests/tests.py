@@ -6,6 +6,11 @@ def generate_email():
     return f"{prefix}@mail.ru"
 
 
+def generate_name():
+    prefix = 'Pug_' + str(''.join([random.choice(list('123456789')) for x in range(2)]))
+    return prefix
+
+
 def test_login(app):
     admin_form = app.forms.open_admin_form()
     admin_form.login_as_admin()
@@ -35,7 +40,14 @@ def test_task_11(app):
 
 
 def test_task_12(app):
-    """"""
+    product_name = generate_name()
 
+    admin_form = app.forms.open_admin_form()
+    admin_form.login_as_admin()
+
+    new_product_form = app.forms.open_new_product_form()
+    new_product_form.fill_form(product_name)
+
+    admin_form.verify_product_presents(product_name)
 
 
