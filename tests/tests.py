@@ -60,6 +60,52 @@ def test_task_9_verify_sort_zones_in_geo_zone(app):
     admin_form.verify_sort_zones_in_geo_zone()
 
 
+def test_task_10_verify_fields(app):
+    """Проверки на главной странице и на странице товара совпадают текст названия товара, акционная и обычная цена"""
+
+    store_form = app.forms.open_store_form()
+    store_form.verify_product()
+
+
+def test_task_10_verify_product_style_on_main_page(app):
+    """Проверки стилей акционной и обычной цен продукта на главной странице"""
+
+    store_form = app.forms.open_store_form()
+
+    store_form.verify_regular_price_is_through()
+    store_form.verify_regular_price_color_is_gray()
+    store_form.verify_campaign_price_color_is_red()
+
+
+def test_task_10_verify_product_style_in_product_card(app):
+    """Проверки стилей акционной и обычной цен продукта в карточке продукта"""
+
+    store_form = app.forms.open_store_form()
+
+    store_form.open_duck_card()
+
+    store_form.verify_regular_price_color_is_gray_in_card()
+    store_form.verify_regular_price_is_through_in_card()
+    store_form.verify_campaign_price_color_is_red_in_card()
+
+
+def test_task_10_verify_text_size_on_main_page(app):
+    """Проверка размера цен продукта на главной странице"""
+
+    store_form = app.forms.open_store_form()
+    store_form.verify_size_of_prices()
+
+
+def test_task_10_verify_text_size_in_product_card(app):
+    """Проверка размера цен продукта в карточке продукта"""
+
+    store_form = app.forms.open_store_form()
+
+    store_form.open_duck_card()
+
+    store_form.verify_size_of_prices_in_card()
+
+
 def test_task_11(app):
     email = generate_email()
     password = "Qwe12345"
