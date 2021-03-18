@@ -68,13 +68,17 @@ class StoreForm:
         assert int(g) == 0
         assert int(b) == 0
 
+    def verify_campaign_price_color_is_bold(self):
+        campaign_price = self._elements.campaign_price()
+        campaign_price_weight = campaign_price.value_of_css_property("font-weight")
+        assert "700" == campaign_price_weight
+
     def verify_size_of_prices(self):
         campaign_price = self._elements.campaign_price()
-        campaign_price_size = campaign_price.size
+        campaign_price_size = campaign_price.value_of_css_property("font-size")
         regular_price = self._elements.regular_price()
-        regular_price_size = regular_price.size
-        assert campaign_price_size.get('height') > regular_price_size.get('height')
-        assert campaign_price_size.get('width') > regular_price_size.get('width')
+        regular_price_size = regular_price.value_of_css_property("font-size")
+        assert campaign_price_size > regular_price_size
 
     def verify_regular_price_color_is_gray_in_card(self):
         regular_price_in_card = self._elements.regular_price_in_card()
@@ -101,13 +105,17 @@ class StoreForm:
         assert int(g) == 0
         assert int(b) == 0
 
+    def verify_campaign_price_color_is_bold_in_card(self):
+        campaign_price_in_card = self._elements.campaign_price_in_card()
+        campaign_price_in_card_weight = campaign_price_in_card.value_of_css_property("font-weight")
+        assert "700" == campaign_price_in_card_weight
+
     def verify_size_of_prices_in_card(self):
         campaign_price_in_card = self._elements.campaign_price_in_card()
-        campaign_price_in_card_size = campaign_price_in_card.size
+        campaign_price_in_card_size = campaign_price_in_card.value_of_css_property("font-size")
         regular_price_in_card = self._elements.regular_price_in_card()
-        regular_price_in_card_size = regular_price_in_card.size
-        assert campaign_price_in_card_size.get('height') > regular_price_in_card_size.get('height')
-        assert campaign_price_in_card_size.get('width') > regular_price_in_card_size.get('width')
+        regular_price_in_card_size = regular_price_in_card.value_of_css_property("font-size")
+        assert campaign_price_in_card_size > regular_price_in_card_size
 
 
 class Elements:

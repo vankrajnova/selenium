@@ -75,6 +75,7 @@ def test_task_10_verify_product_style_on_main_page(app):
     store_form.verify_regular_price_is_through()
     store_form.verify_regular_price_color_is_gray()
     store_form.verify_campaign_price_color_is_red()
+    store_form.verify_campaign_price_color_is_bold()
 
 
 def test_task_10_verify_product_style_in_product_card(app):
@@ -87,6 +88,7 @@ def test_task_10_verify_product_style_in_product_card(app):
     store_form.verify_regular_price_color_is_gray_in_card()
     store_form.verify_regular_price_is_through_in_card()
     store_form.verify_campaign_price_color_is_red_in_card()
+    store_form.verify_campaign_price_color_is_bold_in_card()
 
 
 def test_task_10_verify_text_size_on_main_page(app):
