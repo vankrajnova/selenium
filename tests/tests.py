@@ -148,8 +148,12 @@ def test_task_13(app):
     store_form.remove_product()
     store_form.remove_product()
 
-def test():
-    s = "14.4px"
-    a = s.replace("px", "")
-    b = a.replace(".", ",")
-    print(b)
+
+def test_task_14(app):
+    admin_form = app.forms.open_admin_form()
+    admin_form.login_as_admin()
+
+    admin_form.open_countries_tab()
+    admin_form.open_new_country_form()
+    admin_form.open_all_external_links()
+

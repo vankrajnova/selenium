@@ -1,7 +1,7 @@
 import time
 
 from selenium.webdriver.common.by import By
-
+from selenium.webdriver.support import expected_conditions as EC
 from forms.new_product_form import NewProductForm
 
 
@@ -28,6 +28,9 @@ class AdminForm:
     def open_geo_zones_tab(self):
         self.app.wd.get('http://localhost/litecart/admin/?app=geo_zones&doc=geo_zones')
 
+    def open_new_country_form(self):
+        self._elements.add_new_country_btn().click()
+
     def click_all_menu_buttons(self):
         elements = self._elements.top_level_buttons()
         if len(elements) > 0:
@@ -39,6 +42,17 @@ class AdminForm:
                     self._elements.sub_level_buttons()[i].click()
                     time.sleep(1)
                     assert self._elements.is_header_present()
+
+    def open_all_external_links(self):
+        for i in range(len(self._elements.external_links())):
+            current_window = self.app.wd.current_window_handle
+            old_windows = self.app.wd.window_handles
+            self._elements.external_links()[i].click()
+            self.app.wait.until(EC.new_window_is_opened(old_windows))
+            new_window = [i for i in self.app.wd.window_handles if i not in old_windows]
+            self.app.wd.switch_to.window(new_window[0])
+            self.app.wd.close()
+            self.app.wd.switch_to.window(current_window)
 
     def verify_product_presents(self, product_name):
         assert self._elements.is_product_present(product_name) == 1
@@ -125,6 +139,14 @@ class Elements:
     def is_header_present(self):
         elements = self.app.wd.find_elements(By.TAG_NAME, "h1")
         return len(elements) > 0
+
+    def external_links(self):
+        xpath = """//i[contains(@class, 'fa-external-link')]"""
+        return self.app.wd.find_elements_by_xpath(xpath)
+
+    def add_new_country_btn(self):
+        xpath = """//a[contains(text(), ' Add New Country')]"""
+        return self.app.wd.find_element_by_xpath(xpath)
 
     def top_level_buttons(self):
         xpath = """//*[contains(@id, 'app-')]"""

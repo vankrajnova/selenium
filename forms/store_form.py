@@ -41,10 +41,23 @@ class StoreForm:
         self._elements.checkout().click()
 
     def remove_product(self):
-        items = len(self._elements.items())
+        btn_1 = self._elements.remove_btn()[0]
+        btn_2 = self._elements.remove_btn()[1]
+        btn_3 = self._elements.remove_btn()[2]
+        items = len(self._elements.remove_btn())
         for _ in range(5):
-            self._elements.remove_btn().click()
-            if len(self._elements.items()) == int(items) - 1:
+            btn_1.click()
+            if items == int(items) - 1:
+                return
+            time.sleep(2)
+        for _ in range(5):
+            btn_2.click()
+            if items == int(items) - 1:
+                return
+            time.sleep(2)
+        for _ in range(5):
+            btn_3.click()
+            if items == int(items) - 1:
                 return
             time.sleep(2)
 
@@ -148,7 +161,7 @@ class Elements:
 
     def remove_btn(self):
         xpath = """//button[contains(@value, 'Remove')]"""
-        return self.app.wd.find_element_by_xpath(xpath)
+        return self.app.wd.find_elements_by_xpath(xpath)
 
     def checkout(self):
         xpath = """//a[contains(@class, 'link') and contains(text(), 'Checkout')]"""
