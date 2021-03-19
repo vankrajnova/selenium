@@ -1,4 +1,5 @@
 from selenium import webdriver
+from selenium.webdriver.support.wait import WebDriverWait
 
 from forms.factory import FormFactory
 
@@ -9,7 +10,8 @@ class Application:
         self.wd = webdriver.Chrome()
         # self.wd = webdriver.Firefox()
         # self.wd = webdriver.Ie()
-        self.wd.implicitly_wait(5)
+        self.wait = WebDriverWait(self.wd, 10)
+        self.wd.implicitly_wait(10)
         self.forms = FormFactory(self)
 
     def destroy(self):

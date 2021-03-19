@@ -131,3 +131,25 @@ def test_task_12(app):
     admin_form.verify_product_presents(product_name)
 
 
+def test_task_13(app):
+
+    store_form = app.forms.open_store_form()
+    store_form.add_products_to_cart()
+
+    store_form = app.forms.open_store_form()
+    store_form.add_products_to_cart()
+
+    store_form = app.forms.open_store_form()
+    store_form.add_products_to_cart()
+
+    store_form.open_cart()
+
+    store_form.remove_product()
+    store_form.remove_product()
+    store_form.remove_product()
+
+def test():
+    s = "14.4px"
+    a = s.replace("px", "")
+    b = a.replace(".", ",")
+    print(b)

@@ -1,5 +1,7 @@
 import time
-from telnetlib import EC
+
+from selenium.common.exceptions import StaleElementReferenceException
+from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import wait
 
@@ -27,6 +29,24 @@ class StoreForm:
 
     def open_duck_card(self):
         self._elements.duck().click()
+
+    def add_products_to_cart(self):
+        quantity = self._elements.quantity().text
+        self._elements.products()[0].click()
+        self._elements.add_to_cart_btn().click()
+        count = int(quantity) + 1
+        self.app.wait.until(EC.text_to_be_present_in_element((By.XPATH, """//span[contains(@class, "quantity")]"""), str(count)))
+
+    def open_cart(self):
+        self._elements.checkout().click()
+
+    def remove_product(self):
+        items = len(self._elements.items())
+        for _ in range(5):
+            self._elements.remove_btn().click()
+            if len(self._elements.items()) == int(items) - 1:
+                return
+            time.sleep(2)
 
     def verify_product(self):
         duck_name = self._elements.duck_name().text
@@ -75,10 +95,10 @@ class StoreForm:
 
     def verify_size_of_prices(self):
         campaign_price = self._elements.campaign_price()
-        campaign_price_size = campaign_price.value_of_css_property("font-size")
+        campaign_price_size = campaign_price.value_of_css_property("font-size").replace("px", "")
         regular_price = self._elements.regular_price()
-        regular_price_size = regular_price.value_of_css_property("font-size")
-        assert campaign_price_size > regular_price_size
+        regular_price_size = regular_price.value_of_css_property("font-size").replace("px", "")
+        assert int(campaign_price_size) > float(regular_price_size)
 
     def verify_regular_price_color_is_gray_in_card(self):
         regular_price_in_card = self._elements.regular_price_in_card()
@@ -112,15 +132,27 @@ class StoreForm:
 
     def verify_size_of_prices_in_card(self):
         campaign_price_in_card = self._elements.campaign_price_in_card()
-        campaign_price_in_card_size = campaign_price_in_card.value_of_css_property("font-size")
+        campaign_price_in_card_size = campaign_price_in_card.value_of_css_property("font-size").replace("px", "")
         regular_price_in_card = self._elements.regular_price_in_card()
-        regular_price_in_card_size = regular_price_in_card.value_of_css_property("font-size")
-        assert campaign_price_in_card_size > regular_price_in_card_size
+        regular_price_in_card_size = regular_price_in_card.value_of_css_property("font-size").replace("px", "")
+        assert int(campaign_price_in_card_size) > int(regular_price_in_card_size)
 
 
 class Elements:
     def __init__(self, app):
         self.app = app
+
+    def items(self):
+        xpath = """//td[contains(@class, 'item')]"""
+        return self.app.wd.find_elements_by_xpath(xpath)
+
+    def remove_btn(self):
+        xpath = """//button[contains(@value, 'Remove')]"""
+        return self.app.wd.find_element_by_xpath(xpath)
+
+    def checkout(self):
+        xpath = """//a[contains(@class, 'link') and contains(text(), 'Checkout')]"""
+        return self.app.wd.find_element_by_xpath(xpath)
 
     def duck(self):
         xpath = """//*[contains(@id, 'box-campaigns')]//li"""
