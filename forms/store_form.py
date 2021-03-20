@@ -1,21 +1,15 @@
 import time
 
-from selenium.common.exceptions import StaleElementReferenceException
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support import wait
+
+from forms.product_form import ProductForm
 
 
 class StoreForm:
     def __init__(self, app):
         self.app = app
         self._elements = Elements(app)
-
-    def verify_products_has_one_sticker(self):
-        products = self._elements.products()
-        for product in products:
-            stickers = product.find_elements_by_xpath(""".//*[contains(@class, "sticker")]""")
-            assert len(stickers) == 1
 
     def login(self, email, password):
         self._elements.email.send_keys(email)
@@ -30,32 +24,18 @@ class StoreForm:
     def open_duck_card(self):
         self._elements.duck().click()
 
-    def add_products_to_cart(self):
-        quantity = self._elements.quantity().text
+    def open_first_product_card(self):
         self._elements.products()[0].click()
-        self._elements.add_to_cart_btn().click()
-        count = int(quantity) + 1
-        self.app.wait.until(EC.text_to_be_present_in_element((By.XPATH, """//span[contains(@class, "quantity")]"""), str(count)))
+        return ProductForm(self.app)
 
     def open_cart(self):
         self._elements.checkout().click()
 
-    def stop_action(self):
-        """Останавливает движение картинок"""
-        self.app.wait.until(EC.element_to_be_clickable((By.XPATH, """//li//a[contains(@class, 'inact')]""")))
-        self._elements.picture().click()
-
-    # def remove_all_products(self):
-    #     self.app.wait.until(EC.staleness_of(self._elements.picture()))
-    #     self._elements.remove_btn().click()
-
-    def remove_all_products(self):
-        self.stop_action()
-        for _ in range(5):
-            items = self._elements.items()
-            if len(items) == 3:
-                return
-            time.sleep(1)
+    def verify_products_has_one_sticker(self):
+        products = self._elements.products()
+        for product in products:
+            stickers = product.find_elements_by_xpath(""".//*[contains(@class, "sticker")]""")
+            assert len(stickers) == 1
 
     def verify_product(self):
         duck_name = self._elements.duck_name().text
@@ -151,18 +131,6 @@ class Elements:
     def __init__(self, app):
         self.app = app
 
-    def picture(self):
-        xpath = """//li//a[contains(@class, 'inact act')]"""
-        return self.app.wd.find_element_by_xpath(xpath)
-
-    def items(self):
-        xpath = """//td[contains(@class, 'item')]"""
-        return self.app.wd.find_elements_by_xpath(xpath)
-
-    def remove_btn(self):
-        xpath = """//button[contains(@value, 'Remove')]"""
-        return self.app.wd.find_element_by_xpath(xpath)
-
     def checkout(self):
         xpath = """//a[contains(@class, 'link') and contains(text(), 'Checkout')]"""
         return self.app.wd.find_element_by_xpath(xpath)
@@ -193,14 +161,6 @@ class Elements:
 
     def campaign_price(self):
         xpath = """//*[contains(@id, 'box-campaigns')]//*[contains(@class, 'campaign-price')]"""
-        return self.app.wd.find_element_by_xpath(xpath)
-
-    def add_to_cart_btn(self):
-        xpath = """//button[contains(@name, 'add_cart_product')]"""
-        return self.app.wd.find_element_by_xpath(xpath)
-
-    def quantity(self):
-        xpath = """//span[contains(@class, "quantity")]"""
         return self.app.wd.find_element_by_xpath(xpath)
 
     @property

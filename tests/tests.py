@@ -134,20 +134,20 @@ def test_task_12(app):
 def test_task_13(app):
 
     store_form = app.forms.open_store_form()
-    store_form.add_products_to_cart()
+    product_cart = store_form.open_first_product_card()
+    product_cart.add_product_to_cart()
 
     store_form = app.forms.open_store_form()
-    store_form.add_products_to_cart()
+    product_cart = store_form.open_first_product_card()
+    product_cart.add_product_to_cart()
 
     store_form = app.forms.open_store_form()
-    store_form.add_products_to_cart()
+    product_cart = store_form.open_first_product_card()
+    product_cart.add_product_to_cart()
 
-    store_form.open_cart()
+    cart_form = app.forms.open_cart()
 
-    store_form.remove_all_products()
-    # store_form.remove_product()
-    # store_form.remove_product()
-    # store_form.remove_product()
+    cart_form.remove_all_products()
 
 
 def test_task_14(app):
