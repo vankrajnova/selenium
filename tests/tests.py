@@ -144,9 +144,10 @@ def test_task_13(app):
 
     store_form.open_cart()
 
-    store_form.remove_product()
-    store_form.remove_product()
-    store_form.remove_product()
+    store_form.remove_all_products()
+    # store_form.remove_product()
+    # store_form.remove_product()
+    # store_form.remove_product()
 
 
 def test_task_14(app):
@@ -156,4 +157,12 @@ def test_task_14(app):
     admin_form.open_countries_tab()
     admin_form.open_new_country_form()
     admin_form.open_all_external_links()
+
+
+def test_task_17(app):
+    admin_form = app.forms.open_admin_form()
+    admin_form.login_as_admin()
+
+    admin_form.open_catalog_tab()
+    admin_form.verify_log_is_empty()
 

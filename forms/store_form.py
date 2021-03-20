@@ -40,26 +40,22 @@ class StoreForm:
     def open_cart(self):
         self._elements.checkout().click()
 
-    def remove_product(self):
-        btn_1 = self._elements.remove_btn()[0]
-        btn_2 = self._elements.remove_btn()[1]
-        btn_3 = self._elements.remove_btn()[2]
-        items = len(self._elements.remove_btn())
+    def stop_action(self):
+        """Останавливает движение картинок"""
+        self.app.wait.until(EC.element_to_be_clickable((By.XPATH, """//li//a[contains(@class, 'inact')]""")))
+        self._elements.picture().click()
+
+    # def remove_all_products(self):
+    #     self.app.wait.until(EC.staleness_of(self._elements.picture()))
+    #     self._elements.remove_btn().click()
+
+    def remove_all_products(self):
+        self.stop_action()
         for _ in range(5):
-            btn_1.click()
-            if items == int(items) - 1:
+            items = self._elements.items()
+            if len(items) == 3:
                 return
-            time.sleep(2)
-        for _ in range(5):
-            btn_2.click()
-            if items == int(items) - 1:
-                return
-            time.sleep(2)
-        for _ in range(5):
-            btn_3.click()
-            if items == int(items) - 1:
-                return
-            time.sleep(2)
+            time.sleep(1)
 
     def verify_product(self):
         duck_name = self._elements.duck_name().text
@@ -155,13 +151,17 @@ class Elements:
     def __init__(self, app):
         self.app = app
 
+    def picture(self):
+        xpath = """//li//a[contains(@class, 'inact act')]"""
+        return self.app.wd.find_element_by_xpath(xpath)
+
     def items(self):
         xpath = """//td[contains(@class, 'item')]"""
         return self.app.wd.find_elements_by_xpath(xpath)
 
     def remove_btn(self):
         xpath = """//button[contains(@value, 'Remove')]"""
-        return self.app.wd.find_elements_by_xpath(xpath)
+        return self.app.wd.find_element_by_xpath(xpath)
 
     def checkout(self):
         xpath = """//a[contains(@class, 'link') and contains(text(), 'Checkout')]"""

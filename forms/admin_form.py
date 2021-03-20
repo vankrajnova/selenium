@@ -28,6 +28,9 @@ class AdminForm:
     def open_geo_zones_tab(self):
         self.app.wd.get('http://localhost/litecart/admin/?app=geo_zones&doc=geo_zones')
 
+    def open_catalog_tab(self):
+        self.app.wd.get('http://localhost/litecart/admin/?app=catalog&doc=catalog&category_id=1')
+
     def open_new_country_form(self):
         self._elements.add_new_country_btn().click()
 
@@ -83,10 +86,25 @@ class AdminForm:
             expected_list.sort()
             assert expected_list == actual_list
 
+    def verify_log_is_empty(self):
+        href_list = self._elements.get_href_list_for_products()
+        for href in href_list:
+            self.app.wd.get(href)
+            log = self.app.wd.get_log("browser")
+            if len(log) != 0:
+                print(log)
+
 
 class Elements:
     def __init__(self, app):
         self.app = app
+
+    def get_href_list_for_products(self):
+        all_row = self.app.wd.find_elements_by_xpath("""//a[contains(@title, "Edit")]""")
+        href_list = []
+        for row in all_row:
+            href_list.append(row.get_attribute("href"))
+        return href_list
 
     def get_href_list_for_geo_zones(self):
         all_row = self.app.wd.find_elements_by_xpath("""//a[contains(@title, "Edit")]""")
