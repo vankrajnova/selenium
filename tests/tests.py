@@ -164,5 +164,5 @@ def test_task_17(app):
     admin_form.login_as_admin()
 
     admin_form.open_catalog_tab()
-    admin_form.verify_log_is_empty()
+    admin_form.get_browser_log()
 

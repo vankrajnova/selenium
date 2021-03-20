@@ -86,7 +86,7 @@ class AdminForm:
             expected_list.sort()
             assert expected_list == actual_list
 
-    def verify_log_is_empty(self):
+    def get_browser_log(self):
         href_list = self._elements.get_href_list_for_products()
         for href in href_list:
             self.app.wd.get(href)
