@@ -21,8 +21,9 @@ class CartForm:
         self.app.wait.until(EC.element_to_be_clickable((By.XPATH, self._elements.remove_btn_xpath)))
         items = self._elements.items()
         for _ in items:
+            table = self._elements.table_with_products()
             self._elements.remove_buttons()[0].click()
-            self.app.wait.until(EC.staleness_of(self._elements.table_with_products()))
+            self.app.wait.until(EC.staleness_of(table))
             new_items = self._elements.items()
             if len(new_items) == 0:
                 self.app.wait.until(
